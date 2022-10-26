@@ -1,0 +1,196 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Joshua Game</title>
+    <link rel="icon" type="image/png" href="./icon/ace-of-diamonds.png" />
+    <link href="./newGame.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="main-page">
+      <div>
+        <div onclick="newGame()" id="reStart" class="neon">JOSHUA</div>
+      </div>
+      <div id="arrayCube" class="game-table">
+        <!-- 卡片方塊生成區域 -->
+      </div>
+    </div>
+  </body>
+
+  <script>
+    // 基礎資料
+    var cubesData = [
+      {
+        name: "spades",
+        path: "./icon/spades.png",
+        isActive: false,
+      },
+      {
+        name: "hearts",
+        path: "./icon/hearts.png",
+        isActive: false,
+      },
+      {
+        name: "clover",
+        path: "./icon/clover.png",
+        isActive: false,
+      },
+      {
+        name: "diamonds",
+        path: "./icon/diamonds.png",
+        isActive: false,
+      },
+      {
+        name: "spades",
+        path: "./icon/spades.png",
+        isActive: false,
+      },
+      {
+        name: "hearts",
+        path: "./icon/hearts.png",
+        isActive: false,
+      },
+      {
+        name: "clover",
+        path: "./icon/clover.png",
+        isActive: false,
+      },
+      {
+        name: "diamonds",
+        path: "./icon/diamonds.png",
+        isActive: false,
+      },
+      {
+        name: "spades",
+        path: "./icon/spades.png",
+        isActive: false,
+      },
+      {
+        name: "hearts",
+        path: "./icon/hearts.png",
+        isActive: false,
+      },
+      {
+        name: "clover",
+        path: "./icon/clover.png",
+        isActive: false,
+      },
+      {
+        name: "diamonds",
+        path: "./icon/diamonds.png",
+        isActive: false,
+      },
+      {
+        name: "spades",
+        path: "./icon/spades.png",
+        isActive: false,
+      },
+      {
+        name: "hearts",
+        path: "./icon/hearts.png",
+        isActive: false,
+      },
+      {
+        name: "clover",
+        path: "./icon/clover.png",
+        isActive: false,
+      },
+      {
+        name: "diamonds",
+        path: "./icon/diamonds.png",
+        isActive: false,
+      },
+    ];
+
+    // 刷新洗牌
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    shuffle(cubesData);
+    // console.log("洗牌之後", cubesData);
+
+    var isFirstClick = true;
+    var preIndex = -1;
+    var newIndex = -1;
+    var suitName = "";
+    var judgeStatus = false;
+
+    var container = document.getElementById("arrayCube");
+    for (var i = 0; i < cubesData.length; i++) {
+      container.innerHTML += `<div id="${i}" onclick="switchCard(${i})" class="cube ${
+        cubesData[i].isActive === true ? "active" : "none-class"
+      } ">
+        <div class="card-face card-front"></div>
+        <div class="card-face card-back" style="background-image: url(${
+          cubesData[i].path
+        });"></div>
+      </div>`;
+    }
+
+    function render(index) {
+      var isActive = cubesData[index].isActive;
+      var cube = document.querySelector(`.cube:nth-child(${index + 1})`);
+      cube.classList.toggle("active", isActive);
+      // console.log(cube);
+    }
+
+    function switchCard(index) {
+      console.log("當前 index 是---->", index);
+      console.log("上一個 index 是---->", preIndex);
+
+      // 一次只能點2個來判斷
+      if(preIndex !== -1 && newIndex !== -1){
+        return
+      }
+      
+      // 第一次點擊
+      if (isFirstClick && preIndex !== index) {
+        cubesData[index].isActive = true;
+        isFirstClick = false;
+        preIndex = index;
+        suitName = cubesData[index].name;
+        // console.log("suitName --->", suitName);
+        render(index);
+        return;
+      } else {
+        newIndex = index;
+        // 第二次點擊
+        if (suitName === cubesData[index].name && preIndex !== index) {
+          cubesData[index].isActive = true;
+          render(index);
+          newIndex = -1;
+          preIndex = -1;
+          console.log("配對成功！！！");
+        } else {
+          setTimeout(() => {
+            if (cubesData[preIndex].name !== cubesData[newIndex].name) {
+              cubesData[newIndex].isActive = false;
+              cubesData[preIndex].isActive = false;
+              render(newIndex);
+              render(preIndex);
+              newIndex = -1;
+              preIndex = -1;
+              console.log('配對失敗！！！')
+            }
+            render(index);
+          }, 1000);
+        }
+        isFirstClick = true;
+        cubesData[index].isActive = true;
+        render(index)
+        console.log('~END~', index)
+      }
+    }
+
+    // 重開一局
+    var newGame = () => {
+      alert("New Game On!!!");
+      window.location.reload();
+    };
+  </script>
+</html>
