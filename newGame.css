@@ -85,7 +85,7 @@ h1 {
 }
 
 .card-face {
-  background-color: white;
+  /* background-color: white; */
   position: absolute;
   width: 100%;
   height: 100%;
